@@ -1,15 +1,48 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import PokemonList from './components/PokemonList'
+import AppLoading from '../../components/AppLoading'
 import { FETCH_POKEMONS } from '../../apollo/Query'
 import { useQuery } from '@apollo/react-hooks'
+import { Button, Spinner } from 'react-bootstrap'
+
+function LoadingMore() {
+  return (
+    <Spinner animation="border" role="status">
+      <span className="sr-only">Loading...</span>
+    </Spinner>
+  )
+}
 
 function HomePage() {
-  const { loading, error, data } = useQuery(FETCH_POKEMONS)
-  console.log(loading)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const { loading, error, data, fetchMore } = useQuery(FETCH_POKEMONS, { variables: { offset: 0 } })
+
+  if(loading) return <AppLoading />
+  if (!loading && error) return <div>{error}</div>
+
+  const loadMore = () => {
+    setLoadingMore(true)
+    fetchMore({
+      query: FETCH_POKEMONS,
+      variables: {
+        offset: data.pokemons.length
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        setLoadingMore(false)
+        return Object.assign({}, prev, {
+          pokemons: [...prev.pokemons, ...fetchMoreResult.pokemons]
+        });
+      }
+    })
+  }
+
   return (
     <Fragment>
-      <h2 className="text-center">Pokemons</h2>
-      <PokemonList></PokemonList>
+      <h2 className="text-center mb-4">Pokemons</h2>
+      <PokemonList data={data.pokemons} />
+      {loadingMore && <div style={{ display:'flex', justifyContent:'center', margin: '20px 0'}}><LoadingMore /></div>}
+      {!loadingMore && <Button onClick={() => loadMore()} variant="link">Load more</Button>}
     </Fragment>
   )
 }

@@ -1,10 +1,10 @@
 class Pokemon {
-  constructor(id, name, abilities, images, base_experience, height, weight, ) {
+  constructor(id, name, abilities, images, experience, height, weight, ) {
     this.id = id
     this.name = name
     this.abilities = abilities
     this.images = images
-    this.base_experience = base_experience
+    this.experience = experience
     this.height = height
     this.weight = weight
   }
