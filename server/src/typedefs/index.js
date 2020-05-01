@@ -14,10 +14,18 @@ const typeDefs = gql`
     habitat: String
   }
 
+  type Type {
+    id: ID!
+    name: String!
+    url: String!
+  }
+
   type Query {
     pokemons(offset: Int!): [Pokemon]!
     pokemon(id: Int!): Pokemon
     searchPokemon(name: String!): Pokemon
+    types: [Type]!
+    filterPokemon(id: Int!): [Pokemon]!
   }
 `
 export default typeDefs

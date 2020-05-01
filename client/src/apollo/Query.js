@@ -13,6 +13,32 @@ export const FETCH_POKEMONS = gql`
     }
   }
 `
+
+export const FILTER_POKEMONS = gql`
+  query FilterPokemon($id: Int!)
+  {
+    filterPokemon(id: $id) {
+      id
+      name
+      height
+      weight
+      experience
+      images
+    }
+  }
+`
+
+export const TYPES = gql`
+  query Types
+  {
+    types {
+      id
+      name
+      url
+    }
+  }
+`
+
 export const SEARCH_POKEMON = gql`
   query SearchPokemon($name: String!)
   {

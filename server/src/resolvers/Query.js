@@ -98,6 +98,58 @@ const Query =  {
     } catch (error) {
       return error
     }
+  },
+  types: async () => {
+    try {
+      const { data } = await api({
+        method: 'GET',
+        url: 'type'
+      })
+      const types = []
+      for (const r of data.results) {
+        let array = r.url.split('/')
+        let id = array[array.length - 2]
+        const type = {
+          name: r.name,
+          url: r.url,
+          id: +id
+        }
+        types.push(type)
+      }
+      return types
+    } catch (error) {
+      return error
+    }
+  },
+  filterPokemon: async (_, { id }) => {
+    try {
+      const { data } = await api({
+        method: 'GET',
+        url: 'type/'+id
+      })
+      const result = data.pokemon
+      const pokemons = []
+      for (const r of result) {
+        const pokemon = new Pokemon()
+        pokemon.name = r.name
+        const { data } = await axios({
+          method: 'GET',
+          url: r.url
+        })
+        pokemon.id = data.id
+        pokemon.weight = data.weight
+        pokemon.height = data.height
+        pokemon.experience = data.base_experience
+        const images = []
+        images.push(data.sprites.front_default)
+        images.push(data.sprites.back_default)
+        pokemon.images = images
+        pokemons.push(pokemon)
+      }
+      return pokemons
+    } catch (error) {
+      return error
+    }
   }
 }
 
