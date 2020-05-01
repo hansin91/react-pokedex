@@ -29,7 +29,7 @@ function AppNavbar () {
     </Nav>
     <Form inline onSubmit={(e) => searchPokemon(e)} className="ml-5">
       <Form.Control defaultValue={query.get('q') ? query.get('q') : ''} onChange={(e) => handleInput(e)} type="text" placeholder="Search" className="mr-sm-2" />
-      <Button variant="outline-info">Search</Button>
+      <Button type="submit" variant="outline-info">Search</Button>
     </Form>
   </Navbar>
   )
