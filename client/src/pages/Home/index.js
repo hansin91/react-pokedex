@@ -59,10 +59,10 @@ function HomePage() {
         </Col>
       </Form.Group>
       {loadingFilter && <div style={{ display:'flex', justifyContent:'center', margin: '20px 0'}}><Loading /></div>}
-      {!dataFilter && <PokemonList data={data.pokemons} />}
+      {!dataFilter && !loadingFilter && <PokemonList data={data.pokemons} />}
       {dataFilter && <PokemonList data={dataFilter.filterPokemon} />}
       {loadingMore && <div style={{ display:'flex', justifyContent:'center', margin: '20px 0'}}><Loading /></div>}
-      {!loadingMore && !dataFilter && <Button onClick={() => loadMore()} variant="dark">Load more</Button>}
+      {!loadingMore && !loadingFilter && !dataFilter && <Button onClick={() => loadMore()} variant="dark">Load more</Button>}
     </Fragment>
   )
 }
