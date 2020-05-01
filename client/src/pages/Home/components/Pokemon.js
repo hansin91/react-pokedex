@@ -21,7 +21,7 @@ function Pokemon ({ pokemon }) {
           <p className="mb-0 font-weight-bolder">Height</p>
           <p className="mb-0">{pokemon.height}</p>
         </div>
-        <NavLink to="/">Go to detail</NavLink>
+        <NavLink to={`/pokemon/${pokemon.id}`}>Go to detail</NavLink>
       </Card.Body>
     </Card>
   )

@@ -8,10 +8,15 @@ const typeDefs = gql`
     weight: Int!
     experience: Int!
     images: [String!]!
+    abilities: [String!]!
+    types:[String]!
+    color: String
+    habitat: String
   }
 
   type Query {
     pokemons(offset: Int!): [Pokemon]!
+    pokemon(id: Int!): Pokemon
   }
 `
 export default typeDefs

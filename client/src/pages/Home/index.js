@@ -1,17 +1,10 @@
 import React, { Fragment, useState } from 'react';
 import PokemonList from './components/PokemonList'
 import AppLoading from '../../components/AppLoading'
+import Loading from '../../components/Loading'
 import { FETCH_POKEMONS } from '../../apollo/Query'
 import { useQuery } from '@apollo/react-hooks'
-import { Button, Spinner } from 'react-bootstrap'
-
-function LoadingMore() {
-  return (
-    <Spinner animation="border" role="status">
-      <span className="sr-only">Loading...</span>
-    </Spinner>
-  )
-}
+import { Button } from 'react-bootstrap'
 
 function HomePage() {
   const [loadingMore, setLoadingMore] = useState(false)
@@ -41,7 +34,7 @@ function HomePage() {
     <Fragment>
       <h2 className="text-center mb-4">Pokemons</h2>
       <PokemonList data={data.pokemons} />
-      {loadingMore && <div style={{ display:'flex', justifyContent:'center', margin: '20px 0'}}><LoadingMore /></div>}
+      {loadingMore && <div style={{ display:'flex', justifyContent:'center', margin: '20px 0'}}><Loading /></div>}
       {!loadingMore && <Button onClick={() => loadMore()} variant="link">Load more</Button>}
     </Fragment>
   )
