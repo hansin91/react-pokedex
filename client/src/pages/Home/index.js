@@ -3,7 +3,7 @@ import PokemonList from './components/PokemonList'
 import AppLoading from '../../components/AppLoading'
 import Loading from '../../components/Loading'
 import { FETCH_POKEMONS, TYPES, FILTER_POKEMONS } from '../../apollo/Query'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery, useLazyQuery } from '@apollo/react-hooks'
 import { Button, Form, Row, Col } from 'react-bootstrap'
 
 function HomePage() {
@@ -11,6 +11,9 @@ function HomePage() {
   const [filter, setFilter] = useState(0)
   const { loading, error, data, fetchMore } = useQuery(FETCH_POKEMONS, { variables: { offset: 0 } })
   const { loading: loadingTypes, error: errorTypes, data: dataTypes } = useQuery(TYPES)
+  const [ filterPokemon,
+    { loading: loadingFilter, data: dataFilter }
+  ] = useLazyQuery(FILTER_POKEMONS, { variables: { id: +filter }});
 
   if(loading) return <AppLoading />
   if (!loading && error) return <div>{error}</div>
@@ -32,10 +35,6 @@ function HomePage() {
     })
   }
 
-  // const [ filterPokemon,
-  //   { loading: loadingFilter, data: dataFilter }
-  // ] = useQuery(FILTER_POKEMONS, { variables: { id: +filter } })
-
   const handleSelect =  (e) => {
     setFilter(e.target.value)
   }
@@ -56,12 +55,14 @@ function HomePage() {
           </Form.Group>
         </Col>
         <Col sm="2">
-          <Button type="submit" variant="success">Filter</Button>
+          <Button type="submit" onClick={() => filterPokemon()} variant="success">Filter</Button>
         </Col>
       </Form.Group>
-      <PokemonList data={data.pokemons} />
+      {loadingFilter && <div style={{ display:'flex', justifyContent:'center', margin: '20px 0'}}><Loading /></div>}
+      {!dataFilter && <PokemonList data={data.pokemons} />}
+      {dataFilter && <PokemonList data={dataFilter.filterPokemon} />}
       {loadingMore && <div style={{ display:'flex', justifyContent:'center', margin: '20px 0'}}><Loading /></div>}
-      {!loadingMore && <Button onClick={() => loadMore()} variant="dark">Load more</Button>}
+      {!loadingMore && !dataFilter && <Button onClick={() => loadMore()} variant="dark">Load more</Button>}
     </Fragment>
   )
 }

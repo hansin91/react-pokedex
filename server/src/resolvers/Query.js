@@ -131,18 +131,22 @@ const Query =  {
       const pokemons = []
       for (const r of result) {
         const pokemon = new Pokemon()
-        pokemon.name = r.name
+        pokemon.name = r.pokemon.name
         const { data } = await axios({
           method: 'GET',
-          url: r.url
+          url: r.pokemon.url
         })
         pokemon.id = data.id
         pokemon.weight = data.weight
         pokemon.height = data.height
         pokemon.experience = data.base_experience
         const images = []
-        images.push(data.sprites.front_default)
-        images.push(data.sprites.back_default)
+        if (data.sprites.front_default) {
+          images.push(data.sprites.front_default)
+        }
+        if (data.sprites.back_default) {
+          images.push(data.sprites.back_default)
+        }
         pokemon.images = images
         pokemons.push(pokemon)
       }

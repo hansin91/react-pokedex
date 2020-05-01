@@ -7,9 +7,9 @@ const typeDefs = gql`
     height: Int!
     weight: Int!
     experience: Int!
-    images: [String!]!
-    abilities: [String!]!
-    types:[String]!
+    images: [String]
+    abilities: [String]
+    types:[String]
     color: String
     habitat: String
   }
