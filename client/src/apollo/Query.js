@@ -13,6 +13,20 @@ export const FETCH_POKEMONS = gql`
     }
   }
 `
+export const SEARCH_POKEMON = gql`
+  query SearchPokemon($name: String!)
+  {
+    searchPokemon(name: $name) {
+      id
+      name
+      height
+      weight
+      experience
+      images
+      types
+    }
+  }
+`
 
 export const FETCH_POKEMON_DETAIL = gql`
   query Pokemon($id: Int!)

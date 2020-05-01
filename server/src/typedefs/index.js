@@ -17,6 +17,7 @@ const typeDefs = gql`
   type Query {
     pokemons(offset: Int!): [Pokemon]!
     pokemon(id: Int!): Pokemon
+    searchPokemon(name: String!): Pokemon
   }
 `
 export default typeDefs

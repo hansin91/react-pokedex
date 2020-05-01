@@ -72,6 +72,32 @@ const Query =  {
      } catch (error) {
       return error
     }
+  },
+  searchPokemon: async (_, { name }) => {
+    try {
+      const { data } = await api({
+        method: 'GET',
+        url: 'pokemon/' + name
+      })
+      const pokemon = new Pokemon()
+      pokemon.id = data.id
+      pokemon.name = data.name
+      pokemon.height = data.height
+      pokemon.weight = data.weight
+      pokemon.experience = data.base_experience
+      const images = []
+      images.push(data.sprites.front_default)
+      images.push(data.sprites.back_default)
+      pokemon.images = images
+      const types = []
+      for (const type of data.types) {
+        types.push(type.type.name)
+      }
+      pokemon.types = types
+      return pokemon
+    } catch (error) {
+      return error
+    }
   }
 }
 

@@ -10,7 +10,6 @@ function Detail () {
   const { loading, error, data } = useQuery(FETCH_POKEMON_DETAIL, { variables: { id: +id } })
   return (
     <Fragment>
-      <div><h2 className="text-center mb-3">Pokemon detail</h2></div>
       {loading && <div className="flex-center mt-3"><Loading /></div>}
       {!loading && error && <div>{error}</div> }
       {!loading && data && <PokemonDetail data={data.pokemon} /> }

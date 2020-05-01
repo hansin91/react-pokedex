@@ -4,13 +4,13 @@ import { NavLink } from 'react-router-dom'
 
 function PokemonDetail ({ data }) {
   return (
-    <Row className="justify-content-center align-items-center">
-      <Col xs={12} md={6} className="text-right">
-        <Image className="img-fluid w-50" src={data.images[0]} rounded />
-        <NavLink style={{ display:'inherit'}} to="/"><Button variant="primary">Back to home</Button></NavLink>
+    <Row>
+      <Col xs={12} md={3}>
+        <Image className="img-fluid w-100" src={data.images[0]} rounded />
+        <NavLink style={{ display:'inherit', textAlign:'center'}} to="/"><Button variant="primary">Back to home</Button></NavLink>
       </Col>
       <Col xs={12} md={6}>
-        <h4 style={{ color: '##423b3b', fontWeight: '900'}}>Detail</h4>
+        <h4 style={{ color: '#423b3b', fontWeight: '900'}}>Detail</h4>
         <div className="detail-info">
           <table className="table">
             <tbody>
