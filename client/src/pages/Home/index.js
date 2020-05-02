@@ -14,6 +14,7 @@ function useQuery() {
 function HomePage() {
   const query = useQuery();
   const history = useHistory()
+  const location = useLocation()
   const [loadingMore, setLoadingMore] = useState(false)
   const [filter, setFilter] = useState(query.get("type") ? query.get("type"): '0')
   const [isFilter, setIsFilter] = useState(query.get("type") ? true : false)
@@ -31,7 +32,7 @@ function HomePage() {
       setIsFilter(false)
       loadPokemon()
     }
-  },[])
+  },[location])
 
   if(loading) return <AppLoading />
   if (!loading && error) return <div>{error}</div>
@@ -61,10 +62,8 @@ function HomePage() {
     e.preventDefault()
     if (filter !=='0') {
       setIsFilter(true)
-      filterPokemon({ variables: { id: +filter }})
       history.push('/?type='+ filter)
     } else {
-      setIsFilter(false)
       loadPokemon()
       history.push('/')
     }
