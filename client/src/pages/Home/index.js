@@ -14,7 +14,6 @@ function useQuery() {
 function HomePage() {
   const query = useQuery();
   const history = useHistory()
-  const location = useLocation()
   const [loadingMore, setLoadingMore] = useState(false)
   const [filter, setFilter] = useState(query.get("type") ? query.get("type"): '0')
   const [isFilter, setIsFilter] = useState(query.get("type") ? true : false)
