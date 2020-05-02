@@ -7,13 +7,14 @@ import { useQuery as Query, useLazyQuery } from '@apollo/react-hooks'
 import { Button, Form, Row, Col } from 'react-bootstrap'
 import { useHistory, useLocation } from 'react-router-dom'
 
-function HomePage() {
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 
-  const useQuery = () => {
-    return new URLSearchParams(useLocation().search);
-  }
+function HomePage() {
   const query = useQuery();
   const history = useHistory()
+  const location = useLocation()
   const [loadingMore, setLoadingMore] = useState(false)
   const [filter, setFilter] = useState(query.get("type") ? query.get("type"): '0')
   const [isFilter, setIsFilter] = useState(query.get("type") ? true : false)
@@ -21,15 +22,13 @@ function HomePage() {
   const { loading: loadingTypes, error: errorTypes, data: dataTypes } = Query(TYPES)
   const [ filterPokemon,
     { loading: loadingFilter, data: dataFilter }
-  ] = useLazyQuery(FILTER_POKEMONS, { variables: { id: +filter }});
+  ] = useLazyQuery(FILTER_POKEMONS);
 
   useEffect(() => {
     if (filter !=='0') {
       setIsFilter(true)
-      console.log('filter')
-      filterPokemon()
+      filterPokemon({ variables: { id: +filter }})
     } else {
-      console.log('non filter')
       setIsFilter(false)
       loadPokemon()
     }
@@ -63,39 +62,41 @@ function HomePage() {
     e.preventDefault()
     if (filter !=='0') {
       setIsFilter(true)
+      filterPokemon({ variables: { id: +filter }})
       history.push('/?type='+ filter)
-      filterPokemon()
     } else {
       setIsFilter(false)
-      history.push('/')
       loadPokemon()
+      history.push('/')
     }
   }
 
   return (
     <Fragment>
       <h2 className="text-center mb-4">Pokemons</h2>
-      <Form.Group as={Row}>
-        <Form.Label column sm="1">
-          Type
-        </Form.Label>
-        <Col sm="4">
-          <Form.Group as={Col}>
-          <Form.Control as="select" onChange={(e) => handleSelect(e)} value={filter}>
-            <option value="0">All</option>
-            {!loadingTypes && dataTypes.types.map((type) => <option key={type.id} value={type.id}>{type.name}</option>)}
-          </Form.Control>
-          </Form.Group>
-        </Col>
-        <Col sm="2">
-          <Button type="submit" onClick={(e) => submitFilter(e)} variant="success">Filter</Button>
-        </Col>
-      </Form.Group>
+      <Form onSubmit={(e) => submitFilter(e)}>
+        <Form.Group as={Row}>
+          <Form.Label column sm="1">
+            Type
+          </Form.Label>
+          <Col sm="4">
+            <Form.Group as={Col}>
+            <Form.Control as="select" onChange={(e) => handleSelect(e)} value={filter}>
+              <option value="0">All</option>
+              {!loadingTypes && dataTypes && dataTypes.types.map((type) => <option key={type.id} value={type.id}>{type.name}</option>)}
+            </Form.Control>
+            </Form.Group>
+          </Col>
+          <Col sm="2">
+            <Button type="submit" variant="success">Filter</Button>
+          </Col>
+        </Form.Group>
+      </Form>
       {loadingFilter && <div style={{ display:'flex', justifyContent:'center', margin: '20px 0'}}><Loading /></div>}
       {!loading && data  && !isFilter && <PokemonList data={data.pokemons} />}
       {!loadingFilter && dataFilter && isFilter && <PokemonList data={dataFilter.filterPokemon} />}
       {loadingMore && <div style={{ display:'flex', justifyContent:'center', margin: '20px 0'}}><Loading /></div>}
-      {!loadingMore && !loadingFilter && !dataFilter && <Button onClick={() => loadMore()} variant="dark">Load more</Button>}
+      {!loadingMore && !isFilter && <Button onClick={() => loadMore()} variant="dark">Load more</Button>}
     </Fragment>
   )
 }
